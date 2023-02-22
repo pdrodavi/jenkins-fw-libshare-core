@@ -1,0 +1,34 @@
+# Deploy snapshots to Sonatype OSS repository
+
+name: Deploy
+
+on:
+  workflow_run:
+    workflows:
+      - Build
+    branches:
+      - master
+    types:
+      - completed
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 8
+          cache: maven
+
+      - name: Build, verify, deploy
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+        run: mvn -s ./.maven-settings.xml -B -U clean deploy

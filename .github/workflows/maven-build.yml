@@ -1,0 +1,30 @@
+# Default build validation "clean verify" for non-experimental branches
+
+name: Build
+
+on:
+  push:
+    branches-ignore:
+      - 'experimental/**'
+  pull_request:
+    branches-ignore:
+      - 'experimental/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 8
+          cache: maven
+
+      - name: Build and verify
+        run: mvn -s ./.maven-settings.xml -B -U clean verify

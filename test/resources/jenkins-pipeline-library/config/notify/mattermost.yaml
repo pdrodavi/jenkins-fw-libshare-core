@@ -1,0 +1,13 @@
+- patterns:
+    - .*
+  id: "default mattermost notification configuration"
+  config:
+    endpointCredentialId: default.credential.id
+    channel: jenkins-build-notifications
+
+- patterns:
+    - team-a\/.*
+  id: "default mattermost configuration for all jobs below team-a"
+  config:
+    endpointCredentialId: default.credential.id
+    channel: team-a-jenkins-build-notifications
